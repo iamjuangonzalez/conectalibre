@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Validación de Profesionales de la Salud
 
-## Getting Started
+Este proyecto es una plataforma desarrollada con **Next.js 14** que permite validar la información profesional y legal de profesionales de la salud mediante consultas con su número de cédula.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Consulta de Información**:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  - Información básica, académica y SSO de los profesionales de la salud.
+  - La consulta se realiza utilizando un número de cédula válido.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Generación de Tokens JWT**:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  - Autenticación mediante tokens JWT con expiración de 24 horas.
+  - Generación del token basada en un `api_key` proporcionado o por defecto.
 
-## Learn More
+- **Vistas dinámicas**:
+  - Vistas estructuradas en carpetas como `consult` y `documentation`, manejando el contenido y las rutas de manera organizada.
+  - Un header y un footer que se muestran en todas las rutas.
 
-To learn more about Next.js, take a look at the following resources:
+## Estructura del Proyecto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La estructura principal del proyecto es la siguiente:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+/consult
 
-## Deploy on Vercel
+# Vista principal para consultar profesionales
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+/documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Vista que contiene la documentación para usar el endpoint
+
+### Archivos Principales
+
+- **page.tsx**: Contiene el header y el footer que son renderizados en todas las páginas de la aplicación.
+- **layout.tsx**: Gestiona las fuentes y el diseño global de la aplicación.
+- **consult/index.tsx**: Muestra un formulario para la validación de profesionales por número de cédula.
+- **documentation/index.tsx**: Explica cómo conectarse al endpoint para generar un token JWT y hacer consultas.
+
+## Instalación y Configuración
+
+1. Clona este repositorio:
+
+   ```bash
+   git clone https://github.com/tuusuario/validacion-profesionales-salud.git
+
+   ```
+
+2. Instalacion de dependencias
+   cd validacion-profesionales-salud
+   npm install
+
+3. Inicia el servidor de desarrollo:
+   npm run devs
+
+
+Este archivo README está correctamente formateado en Markdown para que lo utilices en tu proyecto en Git. Los títulos, descripciones y bloques de código están separados para una mejor visualización.
