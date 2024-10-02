@@ -130,13 +130,17 @@ export default function Documentation() {
     <div className={styles.content_documentation}>
       <div className={styles.navigation}>
         <button
-          className={styles.btn_view}
+          className={`${styles.btn_view} ${
+            defaultView === "token" ? styles.active : ""
+          }`}
           onClick={() => handleViewApi("api")}
         >
           Conexión a la API
         </button>
         <button
-          className={styles.btn_view}
+          className={`${styles.btn_view} ${
+            defaultView === "api" ? styles.active : ""
+          }`}
           onClick={() => handleViewToken("token")}
         >
           Generación de Token
@@ -156,7 +160,7 @@ export default function Documentation() {
                 Endpoint Base
               </label>
               <code className={styles.code}>
-                https://api.validacionsalud.com/v1
+                https://conectalibre.vercel.app/api
               </code>
             </div>
             <div className={styles.item_content}>
@@ -176,9 +180,7 @@ export default function Documentation() {
               <label style={{ fontWeight: 600 }} htmlFor="">
                 Ejemplo de Solicitud
               </label>
-              <code className={styles.code}>
-                GET /profesional?tipo=cedula&numero=1234567890
-              </code>
+              <code className={styles.code}>POST /hello</code>
             </div>
             <div className={styles.item_content}>
               <label style={{ fontWeight: 600 }} htmlFor="">

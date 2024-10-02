@@ -42,6 +42,11 @@
   cursor: pointer;
 }
 
+.btn_view.active {
+  background-color: #f2f2f3;
+  color: #6e6e6e;
+}
+
 .header {
   background-color: #000;
   width: 100%;
