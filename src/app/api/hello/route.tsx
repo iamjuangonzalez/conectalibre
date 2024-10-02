@@ -10,7 +10,7 @@ const generateRandomNumberString = () => {
   return (Math.floor(Math.random() * (9000 - 1000 + 1)) + 1000).toString();
 };
 
-export async function getViewStateInitial() {
+const getViewStateInitial = async () => {
   try {
     // URL de la página inicial donde obtendremos __VIEWSTATE y __EVENTVALIDATION
     const url =
@@ -29,7 +29,7 @@ export async function getViewStateInitial() {
     console.error("Error al hacer la solicitud:", error);
     throw error;
   }
-}
+};
 
 // pages/api/hello.js
 export async function POST(req: NextRequest) {
