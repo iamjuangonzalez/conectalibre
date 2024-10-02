@@ -32,7 +32,7 @@ export default function ConsultLayout({
       </section>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        <p>
+        <p style={{ color: "#fff" }}>
           © 2023 Validación de Profesionales de la Salud. Todos los derechos
           reservados.
         </p>

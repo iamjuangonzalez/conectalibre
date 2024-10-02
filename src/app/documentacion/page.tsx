@@ -184,6 +184,30 @@ export default function Documentation() {
             </div>
             <div className={styles.item_content}>
               <label style={{ fontWeight: 600 }} htmlFor="">
+                Body de la solicitud (JSON):
+              </label>
+              <pre className={styles.code}>
+                {`{
+"tipoDocumento": "CC",
+"numeroDocumento": "1234567890"
+}`}
+              </pre>
+            </div>
+            <div className={styles.item_content}>
+              <label style={{ fontWeight: 600 }} htmlFor="">
+                Tipos de documento
+              </label>
+              <pre className={styles.code}>
+                {`{
+  "CC": "Cédula de ciudadanía",
+  "TI": "Tarjeta de identidad",
+  "CE": "Cédula de extranjería",
+  "PT": "Permisos por protección temporal"
+}`}
+              </pre>
+            </div>
+            <div className={styles.item_content}>
+              <label style={{ fontWeight: 600 }} htmlFor="">
                 Ejemplo de Respuesta
               </label>
               <pre className={styles.code}>

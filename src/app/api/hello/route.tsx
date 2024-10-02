@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   if (req.method === "POST") {
     // Obtener los datos del body de la solicitud POST
     const body = await req.json();
-    const { number, documentType } = body;
+    const { numeroDocumento, tipoDocumento } = body;
 
     const authHeader = req.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -71,8 +71,14 @@ export async function POST(req: NextRequest) {
         "ctl00$cntContenido$btnVerificarIdentificacion",
         "Verificar Registro en ReTHUS"
       );
-      formData.append("ctl00$cntContenido$ddlTipoIdentificacion", documentType); // Tipo de documento (CC, TI, etc.)
-      formData.append("ctl00$cntContenido$txtNumeroIdentificacion", number); // Número de identificación
+      formData.append(
+        "ctl00$cntContenido$ddlTipoIdentificacion",
+        tipoDocumento
+      ); // Tipo de documento (CC, TI, etc.)
+      formData.append(
+        "ctl00$cntContenido$txtNumeroIdentificacion",
+        numeroDocumento
+      ); // Número de identificación
       formData.append(
         "ctl00$cntContenido$txtCatpchaConfirmation",
         generateRandomNumberString()

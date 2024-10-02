@@ -6,8 +6,8 @@ import loader from "@/public/loader.svg";
 import Image from "next/image";
 
 export default function Home() {
-  const [number, setNumer] = useState("");
-  const [documentType, setDocumentType] = useState(""); // Declaración de documentType
+  const [numeroDocumento, setNumer] = useState("");
+  const [tipoDocumento, setDocumentType] = useState(""); // Declaración de documentType
   const [isLoading, setIsLoading] = useState(false);
   const [dataResponse, setDataResponse] = useState(null);
   const token_consult =
@@ -19,10 +19,14 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
-      if (documentType === "")
+      if (tipoDocumento === "")
         return alert("Debes seleccionar el tipo de documento");
 
-      if (number === "" || number === undefined || number === null)
+      if (
+        numeroDocumento === "" ||
+        numeroDocumento === undefined ||
+        numeroDocumento === null
+      )
         return alert("Agrega una identificación valida");
       setIsLoading(true);
       e.preventDefault();
@@ -32,7 +36,7 @@ export default function Home() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token_consult}`,
         },
-        body: JSON.stringify({ number, documentType }), // Aquí envías el dato como JSON
+        body: JSON.stringify({ numeroDocumento, tipoDocumento }), // Aquí envías el dato como JSON
       });
 
       const data = await res.json();
@@ -161,7 +165,7 @@ export default function Home() {
               min={1}
               maxLength={12}
               type="number"
-              value={number}
+              defaultValue={numeroDocumento}
               onChange={(e) => setNumer(e.target.value)}
               placeholder="Número de Cédula"
             />
