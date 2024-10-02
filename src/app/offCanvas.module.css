@@ -1,0 +1,57 @@
+/* Contenedor principal del Offcanvas */
+.offcanvas {
+  position: fixed;
+  top: 0;
+  right: 0; /* Inicia oculto fuera de la pantalla */
+  width: 300px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease-in-out; /* Animación suave al aparecer */
+  z-index: 1050;
+}
+
+/* Cuando está visible, aparece en pantalla */
+.offcanvas.show {
+  right: 0; /* Mueve el Offcanvas dentro de la pantalla */
+}
+
+/* Contenido interno del Offcanvas */
+.offcanvas_content {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Botón de cerrar */
+.close_button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Estilo para el overlay (fondo oscuro) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1049;
+  display: none;
+}
+
+.overlay.show {
+  display: block;
+}
+
+/* Hacer que el contenido tenga scroll si se desborda */
+.offcanvas_content {
+  overflow-y: auto;
+  max-height: 100%;
+}
