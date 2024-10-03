@@ -32,7 +32,10 @@ const getViewStateInitial = async () => {
 };
 
 // pages/api/hello.js
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Permite todas las solicitudes
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "POST") {
     // Obtener los datos del body de la solicitud POST
     const body = await req.json();
