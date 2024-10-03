@@ -32,10 +32,20 @@ const getViewStateInitial = async () => {
 };
 
 // pages/api/hello.js
-export async function POST(req: NextRequest, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Permite todas las solicitudes
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+export async function POST(req: NextRequest) {
+  const origin = req.headers.get("origin") || "*";
+
+  // Configura los encabezados de CORS
+  const headers = new Headers({
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+  });
+
+  // Verifica si es una solicitud de OPTIONS (Preflight request)
+  if (req.method === "OPTIONS") {
+    return NextResponse.json(null, { headers, status: 200 });
+  }
   if (req.method === "POST") {
     // Obtener los datos del body de la solicitud POST
     const body = await req.json();
