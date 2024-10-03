@@ -50,88 +50,6 @@ export default function Home() {
     }
   };
 
-  /* const datafake = {
-    primerNombre: "ALVARO",
-    segundoNombre: "ENRIQUE",
-    primerApellido: "SOLANO",
-    segundoApellido: "BERRIO",
-    nroIdentificacion: "6862949",
-    estadoIdentificacion: "Vigente",
-    tipo: "CC",
-    fechaConsulta: "2024-09-30→10:25:22 AM",
-    informacionAcademica: [
-      {
-        tipoPrograma: "UNV",
-        origenObtencion: "Local",
-        profesion: "MEDICINA",
-        fechaInicioEjercer: "1981-04-22",
-        actoAdministrativo: "3560",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-      {
-        tipoPrograma: "ESP",
-        origenObtencion: "Local",
-        profesion: "ESPECIALIZACION EN PSIQUIATRIA",
-        fechaInicioEjercer: "1990-09-28",
-        actoAdministrativo: "56923",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-      {
-        tipoPrograma: "ESP",
-        origenObtencion: "Local",
-        profesion: "ESPECIALIZACION EN PSIQUIATRIA",
-        fechaInicioEjercer: "1990-09-28",
-        actoAdministrativo: "56923",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-      {
-        tipoPrograma: "ESP",
-        origenObtencion: "Local",
-        profesion: "ESPECIALIZACION EN PSIQUIATRIA",
-        fechaInicioEjercer: "1990-09-28",
-        actoAdministrativo: "56923",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-    ],
-    datosSSO: [
-      {
-        tipoPrestacion: "Presto SSO",
-        tipoLugarPrestacion: "Local",
-        lugarPrestacion: "COLOMBIA|CÓRDOBA|CANALETE",
-        fechaInicio: "1976-06-01",
-        fechaFin: "1977-06-01",
-        modalidadPrestacion:
-          "Prestación de Servicios Profesionales de Salud en IPS Habilitada",
-        programaPrestacion: "Medicina",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-      {
-        tipoPrestacion: "Presto SSO",
-        tipoLugarPrestacion: "Local",
-        lugarPrestacion: "COLOMBIA|CÓRDOBA|CANALETE",
-        fechaInicio: "1976-06-01",
-        fechaFin: "1977-06-01",
-        modalidadPrestacion:
-          "Prestación de Servicios Profesionales de Salud en IPS Habilitada",
-        programaPrestacion: "Medicina",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-      {
-        tipoPrestacion: "Presto SSO",
-        tipoLugarPrestacion: "Local",
-        lugarPrestacion: "COLOMBIA|CÓRDOBA|CANALETE",
-        fechaInicio: "1976-06-01",
-        fechaFin: "1977-06-01",
-        modalidadPrestacion:
-          "Prestación de Servicios Profesionales de Salud en IPS Habilitada",
-        programaPrestacion: "Medicina",
-        entidadReportadora: "COLEGIO MEDICO COLOMBIANO",
-      },
-    ],
-    mensaje:
-      "La información dispuesta se encuentra en proceso de actualización de conformidad con lo señalado por el Ministerio de Salud y Protección Social. El talento humano en salud puede continuar ejerciendo su profesión u ocupación del área de la salud, presentando los documentos que acreditaron el cumplimiento de los requisitos que se encontraban vigentes (Resolución de autorización de ejercicio en todo el territorio nacional, expedida por este Ministerio o por una Secretaría de Salud, y según la profesión, tarjeta profesional, matrícula profesional, etc.).",
-  }; */
-
   return (
     <div className={styles.content_container}>
       <div className={styles.card_form}>
@@ -276,9 +194,9 @@ export default function Home() {
       </div> */}
       {dataResponse && !isLoading && (
         <>
-          {dataResponse.info_sso.length === 0 &&
-            dataResponse.info_academic.length === 0 &&
-            dataResponse.info_basic.length === 0 && (
+          {!dataResponse.info_sso &&
+            !dataResponse.info_academic &&
+            !dataResponse.info_basic && (
               <div
                 className={styles.error_message}
                 style={{ marginTop: 20, textAlign: "center" }}
@@ -287,45 +205,44 @@ export default function Home() {
               </div>
             )}
 
-          {dataResponse.info_basic.length > 0 ||
-            (dataResponse.info_basic && (
-              <div className={styles.table_wrapper}>
-                <div className={styles.card_header}>
-                  <h3>Resultado de la Búsqueda</h3>
-                </div>
-                <table className={styles.fl_table}>
-                  <thead>
-                    <tr>
-                      <th>Nombres</th>
-                      <th>Apellidos</th>
-                      <th>Identificación</th>
-                      <th>Estado Identificación</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        {dataResponse?.info_basic?.primerNombre +
-                          " " +
-                          dataResponse?.info_basic?.segundoNombre}
-                      </td>
-                      <td>
-                        {dataResponse?.info_basic?.primerApellido +
-                          " " +
-                          dataResponse?.info_basic?.segundoApellido}
-                      </td>
-                      <td>
-                        {dataResponse?.info_basic?.tipoIdentificacion +
-                          " " +
-                          dataResponse?.info_basic?.nroIdentificacion}
-                      </td>
-                      <td>{dataResponse?.info_basic?.estadoIdentificacion}</td>
-                    </tr>
-                  </tbody>
-                </table>
+          {dataResponse.info_basic && (
+            <div className={styles.table_wrapper}>
+              <div className={styles.card_header}>
+                <h3>Resultado de la Búsqueda</h3>
               </div>
-            ))}
-          {dataResponse.info_academic.length > 0 && (
+              <table className={styles.fl_table}>
+                <thead>
+                  <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Identificación</th>
+                    <th>Estado Identificación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {dataResponse?.info_basic?.primerNombre +
+                        " " +
+                        dataResponse?.info_basic?.segundoNombre}
+                    </td>
+                    <td>
+                      {dataResponse?.info_basic?.primerApellido +
+                        " " +
+                        dataResponse?.info_basic?.segundoApellido}
+                    </td>
+                    <td>
+                      {dataResponse?.info_basic?.tipoIdentificacion +
+                        " " +
+                        dataResponse?.info_basic?.nroIdentificacion}
+                    </td>
+                    <td>{dataResponse?.info_basic?.estadoIdentificacion}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+          {dataResponse.info_academic && (
             <div className={styles.table_wrapper}>
               <div className={styles.card_header}>
                 <h3>Información Académica</h3>
@@ -356,7 +273,7 @@ export default function Home() {
               </table>
             </div>
           )}
-          {dataResponse.info_sso.length > 0 && (
+          {dataResponse.info_sso && (
             <div className={styles.table_wrapper}>
               <div className={styles.card_header}>
                 <h3>Datos SSO</h3>

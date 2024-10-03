@@ -38,6 +38,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { numeroDocumento, tipoDocumento } = body;
 
+    if (!numeroDocumento && !tipoDocumento) {
+      return NextResponse.json(
+        {
+          mensaje: "Error en la consulta, revisa los campos de la petición",
+          success: false,
+        },
+        { status: 500 }
+      );
+    }
+
     const authHeader = req.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -207,9 +217,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         message: "Consulta realizada",
         data: {
-          info_basic: resultInfoBasic.length > 0 ? resultInfoBasic[0] : [],
-          info_academic: resultAcademicos.length > 0 ? resultAcademicos : [],
-          info_sso: resultsSSO.length > 0 ? resultsSSO : [],
+          info_basic:
+            resultInfoBasic.length > 0 ? resultInfoBasic[0] : undefined,
+          info_academic:
+            resultAcademicos.length > 0 ? resultAcademicos : undefined,
+          info_sso: resultsSSO.length > 0 ? resultsSSO : undefined,
           mensaje:
             "La información dispuesta se encuentra en proceso de actualización de conformidad con lo señalado por el Ministerio de Salud y Protección Social. El talento humano en salud puede continuar ejerciendo su profesión u ocupación del área de la salud, presentando los documentos que acreditaron el cumplimiento de los requisitos que se encontraban vigentes (Resolución de autorización de ejercicio en todo el territorio nacional, expedida por este Ministerio o por una Secretaría de Salud, y según la profesión, tarjeta profesional, matrícula profesional, etc.).",
         },
