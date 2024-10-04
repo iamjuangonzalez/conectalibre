@@ -1,15 +1,39 @@
 // pages/api/hello.js
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { validateToken } from "@/app/services/jwt.service";
 
+const allowedMethods = ["GET", "POST", "OPTIONS"];
+const allowedHeaders = ["Content-Type", "Authorization"];
+
+function getHeaders() {
+  const headers = new Headers();
+  // Obtener el origen de la solicitud
+  headers.set("Access-Control-Allow-Origin", "*");
+  headers.set("Access-Control-Allow-Methods", allowedMethods.join(","));
+  headers.set("Access-Control-Allow-Headers", allowedHeaders.join(","));
+  return headers;
+}
+
+export async function GET() {
+  const headers = getHeaders();
+  return NextResponse.json({ message: "Hola mundo" }, { headers });
+}
+
+export async function OPTIONS() {
+  const headers = getHeaders();
+  return new NextResponse(null, { status: 204, headers });
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+//
 const generateRandomNumberString = () => {
   return (Math.floor(Math.random() * (9000 - 1000 + 1)) + 1000).toString();
 };
 
+// Get ViewStateInitial
 const getViewStateInitial = async () => {
   try {
     // URL de la página inicial donde obtendremos __VIEWSTATE y __EVENTVALIDATION
@@ -32,22 +56,38 @@ const getViewStateInitial = async () => {
 };
 
 // pages/api/hello.js
-export async function POST(req: NextRequest) {
-  const origin = req.headers.get("origin") || "*";
+export async function POST(req: Request) {
+  const headers = getHeaders();
 
-  // Configura los encabezados de CORS
-  const headers = new Headers({
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-  });
-
-  // Verifica si es una solicitud de OPTIONS (Preflight request)
-  if (req.method === "OPTIONS") {
-    return NextResponse.json(null, { headers, status: 200 });
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return new NextResponse(
+      JSON.stringify({ error: "Falta el token de autorización" }),
+      {
+        status: 401,
+        headers,
+      }
+    );
   }
+  const token = authHeader.split(" ")[1];
+
+  const result = await validateToken(token);
+  if (!result.valid) {
+    console.log("El token no es válido:", result.error);
+    return new NextResponse(
+      JSON.stringify({
+        message: "El token no es válido:",
+        error: result.error,
+      }),
+      {
+        status: 401,
+        headers,
+      }
+    );
+  }
+
   if (req.method === "POST") {
-    // Obtener los datos del body de la solicitud POST
+    console.log("Probando");
     const body = await req.json();
     const { numeroDocumento, tipoDocumento } = body;
 
@@ -58,27 +98,6 @@ export async function POST(req: NextRequest) {
           success: false,
         },
         { status: 500 }
-      );
-    }
-
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Falta el token de autorización" },
-        { status: 401 }
-      );
-    }
-    const token = authHeader.split(" ")[1];
-
-    const result = await validateToken(token);
-    if (!result.valid) {
-      console.log("El token no es válido:", result.error);
-      return NextResponse.json(
-        {
-          message: "El token no es válido:",
-          error: result.error,
-        },
-        { status: 401 }
       );
     }
 
@@ -126,6 +145,8 @@ export async function POST(req: NextRequest) {
       });
       const $ = cheerio.load(response.data);
 
+      console.log("Probando x2");
+
       const newViewState = $('input[name="__VIEWSTATE"]').val();
       formData.delete("__VIEWSTATE");
       formData.append("__VIEWSTATE", newViewState);
@@ -148,7 +169,7 @@ export async function POST(req: NextRequest) {
           Accept: "*/*",
         },
       });
-
+      console.log("Probando x3");
       const $_1 = cheerio.load(res.data);
 
       // Extraer la tabla de resultados básicos
@@ -202,6 +223,7 @@ export async function POST(req: NextRequest) {
         });
       }
 
+      console.log("Probando x4");
       // Obtencion de los datos SSO
       const ssoTable = $_1("#ctl00_cntContenido_grdDatosSSO");
       const resultsSSO = [];
@@ -227,24 +249,27 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      return NextResponse.json({
-        message: "Consulta realizada",
-        data: {
-          info_basic:
-            resultInfoBasic.length > 0 ? resultInfoBasic[0] : undefined,
-          info_academic:
-            resultAcademicos.length > 0 ? resultAcademicos : undefined,
-          info_sso: resultsSSO.length > 0 ? resultsSSO : undefined,
-          mensaje:
-            "La información dispuesta se encuentra en proceso de actualización de conformidad con lo señalado por el Ministerio de Salud y Protección Social. El talento humano en salud puede continuar ejerciendo su profesión u ocupación del área de la salud, presentando los documentos que acreditaron el cumplimiento de los requisitos que se encontraban vigentes (Resolución de autorización de ejercicio en todo el territorio nacional, expedida por este Ministerio o por una Secretaría de Salud, y según la profesión, tarjeta profesional, matrícula profesional, etc.).",
+      return NextResponse.json(
+        {
+          message: "Consulta realizada",
+          data: {
+            info_basic:
+              resultInfoBasic.length > 0 ? resultInfoBasic[0] : undefined,
+            info_academic:
+              resultAcademicos.length > 0 ? resultAcademicos : undefined,
+            info_sso: resultsSSO.length > 0 ? resultsSSO : undefined,
+            mensaje:
+              "La información dispuesta se encuentra en proceso de actualización de conformidad con lo señalado por el Ministerio de Salud y Protección Social. El talento humano en salud puede continuar ejerciendo su profesión u ocupación del área de la salud, presentando los documentos que acreditaron el cumplimiento de los requisitos que se encontraban vigentes (Resolución de autorización de ejercicio en todo el territorio nacional, expedida por este Ministerio o por una Secretaría de Salud, y según la profesión, tarjeta profesional, matrícula profesional, etc.).",
+          },
+          success: true,
         },
-        success: true,
-      });
+        { status: 200, headers }
+      );
     } catch (error) {
       console.error("Error al hacer la consulta:", error);
       return NextResponse.json(
         { mensaje: "Error en la consulta", error, success: false },
-        { status: 500 }
+        { status: 500, headers }
       );
     }
   } else {
@@ -253,9 +278,4 @@ export async function POST(req: NextRequest) {
       { status: 405 }
     );
   }
-}
-
-// Manejo de solicitud GET
-export async function GET() {
-  return NextResponse.json({ message: "Api v1" });
 }
