@@ -26,6 +26,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          id="wompi-scrp"
+          type="text/javascript"
+          src="https://checkout.wompi.co/widget.js"
+          async
+        ></script>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>

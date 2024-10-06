@@ -87,7 +87,6 @@ export async function POST(req: Request) {
   }
 
   if (req.method === "POST") {
-    console.log("Probando");
     const body = await req.json();
     const { numeroDocumento, tipoDocumento } = body;
 
@@ -145,8 +144,6 @@ export async function POST(req: Request) {
       });
       const $ = cheerio.load(response.data);
 
-      console.log("Probando x2");
-
       const newViewState = $('input[name="__VIEWSTATE"]').val();
       formData.delete("__VIEWSTATE");
       formData.append("__VIEWSTATE", newViewState);
@@ -169,7 +166,7 @@ export async function POST(req: Request) {
           Accept: "*/*",
         },
       });
-      console.log("Probando x3");
+
       const $_1 = cheerio.load(res.data);
 
       // Extraer la tabla de resultados básicos
@@ -223,7 +220,6 @@ export async function POST(req: Request) {
         });
       }
 
-      console.log("Probando x4");
       // Obtencion de los datos SSO
       const ssoTable = $_1("#ctl00_cntContenido_grdDatosSSO");
       const resultsSSO = [];

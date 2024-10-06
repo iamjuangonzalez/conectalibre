@@ -1,84 +1,112 @@
 // app/documentation/page.tsx
 "use client";
 import styles from "@/app/styles/documentation.module.css"; // Reutiliza estilos si es necesario
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { SignJWT } from "jose";
+import { db } from "../../../firebase";
+import Link from "next/link";
+
+const api_key_validates = [
+  "1",
+  "sk_test_51ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_98765432109876543210987654321098765",
+  "api_key_987654321abcdefghijklmnopqrstuvwxyz",
+  "sk_test_52ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_87654321098765432109876543210987654",
+  "api_key_876543210abcdefghijklmnopqrstuvwxyz",
+  "sk_test_53ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_76543210987654321098765432109876543",
+  "api_key_765432109abcdefghijklmnopqrstuvwxyz",
+  "sk_test_54ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_65432109876543210987654321098765432",
+  "api_key_654321098abcdefghijklmnopqrstuvwxyz",
+  "sk_test_55ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_54321098765432109876543210987654321",
+  "api_key_543210987abcdefghijklmnopqrstuvwxyz",
+  "sk_test_56ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_43210987654321098765432109876543210",
+  "api_key_432109876abcdefghijklmnopqrstuvwxyz",
+  "sk_test_57ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_32109876543210987654321098765432109",
+  "api_key_321098765abcdefghijklmnopqrstuvwxyz",
+  "sk_test_58ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_21098765432109876543210987654321098",
+  "api_key_210987654abcdefghijklmnopqrstuvwxyz",
+  "sk_test_59ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_10987654321098765432109876543210987",
+  "api_key_109876543abcdefghijklmnopqrstuvwxyz",
+  "sk_test_60ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_09876543210987654321098765432109876",
+  "api_key_098765432abcdefghijklmnopqrstuvwxyz",
+  "sk_test_61ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_98765432109876543210987654321098765",
+  "api_key_987654321abcdefghijklmnopqrstuvwxyz",
+  "sk_test_62ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_87654321098765432109876543210987654",
+  "api_key_876543210abcdefghijklmnopqrstuvwxyz",
+  "sk_test_63ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_76543210987654321098765432109876543",
+  "api_key_765432109abcdefghijklmnopqrstuvwxyz",
+  "sk_test_64ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_65432109876543210987654321098765432",
+  "api_key_654321098abcdefghijklmnopqrstuvwxyz",
+  "sk_test_65ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_54321098765432109876543210987654321",
+  "api_key_543210987abcdefghijklmnopqrstuvwxyz",
+  "sk_test_66ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_43210987654321098765432109876543210",
+  "api_key_432109876abcdefghijklmnopqrstuvwxyz",
+  "sk_test_67ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_32109876543210987654321098765432109",
+  "api_key_321098765abcdefghijklmnopqrstuvwxyz",
+  "sk_test_68ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_21098765432109876543210987654321098",
+  "api_key_210987654abcdefghijklmnopqrstuvwxyz",
+  "sk_test_69ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_10987654321098765432109876543210987",
+  "api_key_109876543abcdefghijklmnopqrstuvwxyz",
+  "sk_test_70ABCDEfghijklmnopqrstuvwxyz0123456789",
+  "pk_live_09876543210987654321098765432109876",
+  "api_key_098765432abcdefghijklmnopqrstuvwxyz",
+];
+
+/* const getRandomApiKey = () => {
+  const randomIndex = Math.floor(Math.random() * api_key_validates.length);
+  return api_key_validates[randomIndex];
+}; */
 
 export default function Documentation() {
   const [defaultView, setDefaultView] = useState("api");
   const [isToken, setIsToken] = useState(null);
   const [tokenG, setTokenG] = useState(null);
   const [api_key, setInputKey] = useState(null);
+  /* const [message, setMessage] = useState(""); */
+
+  const [keys, setkeys] = useState(null);
+  console.log(keys);
+
+  const fetchData = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "api_keys")); // Reemplaza 'documents' con el nombre de tu colección
+      const docsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setkeys(docsData);
+    } catch (error) {
+      console.error("Error al obtener los documentos: ", error);
+    }
+  };
+  useEffect(() => {
+    fetchData(); // Llama a la función para obtener los datos
+  }, []);
 
   const handleViewApi = (view: string) => {
     if (view === "api") {
       setDefaultView("api");
     }
   };
-
-  const api_key_validates = [
-    "1",
-    "sk_test_51ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_98765432109876543210987654321098765",
-    "api_key_987654321abcdefghijklmnopqrstuvwxyz",
-    "sk_test_52ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_87654321098765432109876543210987654",
-    "api_key_876543210abcdefghijklmnopqrstuvwxyz",
-    "sk_test_53ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_76543210987654321098765432109876543",
-    "api_key_765432109abcdefghijklmnopqrstuvwxyz",
-    "sk_test_54ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_65432109876543210987654321098765432",
-    "api_key_654321098abcdefghijklmnopqrstuvwxyz",
-    "sk_test_55ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_54321098765432109876543210987654321",
-    "api_key_543210987abcdefghijklmnopqrstuvwxyz",
-    "sk_test_56ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_43210987654321098765432109876543210",
-    "api_key_432109876abcdefghijklmnopqrstuvwxyz",
-    "sk_test_57ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_32109876543210987654321098765432109",
-    "api_key_321098765abcdefghijklmnopqrstuvwxyz",
-    "sk_test_58ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_21098765432109876543210987654321098",
-    "api_key_210987654abcdefghijklmnopqrstuvwxyz",
-    "sk_test_59ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_10987654321098765432109876543210987",
-    "api_key_109876543abcdefghijklmnopqrstuvwxyz",
-    "sk_test_60ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_09876543210987654321098765432109876",
-    "api_key_098765432abcdefghijklmnopqrstuvwxyz",
-    "sk_test_61ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_98765432109876543210987654321098765",
-    "api_key_987654321abcdefghijklmnopqrstuvwxyz",
-    "sk_test_62ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_87654321098765432109876543210987654",
-    "api_key_876543210abcdefghijklmnopqrstuvwxyz",
-    "sk_test_63ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_76543210987654321098765432109876543",
-    "api_key_765432109abcdefghijklmnopqrstuvwxyz",
-    "sk_test_64ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_65432109876543210987654321098765432",
-    "api_key_654321098abcdefghijklmnopqrstuvwxyz",
-    "sk_test_65ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_54321098765432109876543210987654321",
-    "api_key_543210987abcdefghijklmnopqrstuvwxyz",
-    "sk_test_66ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_43210987654321098765432109876543210",
-    "api_key_432109876abcdefghijklmnopqrstuvwxyz",
-    "sk_test_67ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_32109876543210987654321098765432109",
-    "api_key_321098765abcdefghijklmnopqrstuvwxyz",
-    "sk_test_68ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_21098765432109876543210987654321098",
-    "api_key_210987654abcdefghijklmnopqrstuvwxyz",
-    "sk_test_69ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_10987654321098765432109876543210987",
-    "api_key_109876543abcdefghijklmnopqrstuvwxyz",
-    "sk_test_70ABCDEfghijklmnopqrstuvwxyz0123456789",
-    "pk_live_09876543210987654321098765432109876",
-    "api_key_098765432abcdefghijklmnopqrstuvwxyz",
-  ];
 
   // Función para generar el token
   async function generateToken() {
@@ -125,6 +153,36 @@ export default function Documentation() {
   const validateApiKey = () => {
     return api_key_validates.includes(api_key);
   };
+
+  /* const sendApiKey = async () => {
+    const randomApiKey = getRandomApiKey();
+
+    try {
+      const response = await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: "John",
+          apiKey: randomApiKey,
+          email,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result, "Result");
+        setMessage("Correo enviado con éxito");
+      } else {
+        setMessage("Error al enviar el correo");
+      }
+    } catch (error) {
+      console.log(error, "Error");
+      console.log(message, "Message");
+      setMessage("Error al enviar el correo");
+    }
+  }; */
 
   return (
     <div className={styles.content_documentation}>
@@ -266,6 +324,22 @@ export default function Documentation() {
           <div className={styles.content}>
             <div className={styles.item_content}>
               <label style={{ fontWeight: 600 }} htmlFor="">
+                Empieza a utilizar tu API
+              </label>
+              <small style={{ fontSize: 12, color: "#7F7F7F" }}>
+                Accede a la plataforma para gestionar tus API de manera
+                eficiente y segura.
+              </small>
+              <Link
+                href="/dashboard/auth"
+                className={styles.btn_generator_token}
+                style={{ marginTop: 6 }}
+              >
+                Ir a Iniciar Sesión
+              </Link>
+            </div>
+            <div className={styles.item_content}>
+              <label style={{ fontWeight: 600 }} htmlFor="">
                 API Key
               </label>
               <input
@@ -278,12 +352,14 @@ export default function Documentation() {
                 onChange={(e) => setInputKey(e.target.value)}
               />
               <button
+                style={{ marginTop: 6 }}
                 className={styles.btn_generator_token}
                 onClick={() => generateToken()}
               >
                 Generar token
               </button>
             </div>
+
             {isToken && tokenG && (
               <div className={styles.item_content}>
                 <label style={{ fontWeight: 600 }} htmlFor="">

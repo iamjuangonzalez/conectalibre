@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebasegen/default": "file:generated/javascript/default",
     "@types/cheerio": "^0.22.35",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
+    "firebase": "^10.14.0",
     "jose": "^5.9.3",
     "jsonwebtoken": "^9.0.2",
     "next": "14.2.13",
