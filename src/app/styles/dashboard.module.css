@@ -170,3 +170,32 @@
   gap: 10px;
 }
 
+.table_container {
+  overflow-x: auto;
+}
+
+.table_container {
+  --sb-track-color: #5d5d5d;
+  --sb-thumb-color: #000000;
+  --sb-size: 6px;
+}
+
+.table_container::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.table_container::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 1px;
+}
+
+.table_container::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 1px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .table_container {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}

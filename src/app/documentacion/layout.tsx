@@ -14,7 +14,7 @@ export default function ConsultLayout({
           Aprende a conectarte y usar nuestra API de Validación de Profesionales
           de la Salud
         </h3>
-        <a className={styles.documentation} href="/consult">
+        <a className={styles.documentation} href="/consulta-profesionales-salud">
           <svg
             width="27"
             height="27"

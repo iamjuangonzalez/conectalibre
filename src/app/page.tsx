@@ -11,7 +11,7 @@ export default function Home() {
       </section>
       <nav className={styles.navigation}>
         <a href="/documentacion">Documentacion</a>
-        <a href="/consult">Consultas</a>
+        <a href="/consulta-profesionales-salud">Consultas</a>
       </nav>
       <footer className={styles.footer}>
         <p>

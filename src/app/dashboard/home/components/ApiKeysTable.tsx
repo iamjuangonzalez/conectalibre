@@ -226,54 +226,58 @@ const ApiKeysTable = () => {
         <h2>Tus Tokens</h2>
         <p>Administra tus token para peticiones</p>
 
-        <table className={styles.apiKeysTable}>
-          <thead>
-            <tr>
-              <th>API Token</th>
-              <th>Registro</th>
-              <th>Expiración</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tokenList.length === 0 ? (
+        <div className={styles.table_container}>
+          <table className={styles.apiKeysTable}>
+            <thead>
               <tr>
-                <td colSpan={4}>No hay tokens generados para esta API Key.</td>
+                <th>API Token</th>
+                <th>Registro</th>
+                <th>Expiración</th>
+                <th>Acciones</th>
               </tr>
-            ) : (
-              tokenList.map((key) => (
-                <tr key={key.token}>
-                  <td title={key.token}>{truncateToken(key.token)}</td>
-                  <td>{key.createdAt.toLocaleString()}</td>
-                  <td>{key.expiresAt.toLocaleString()}</td>
-                  <td>
-                    <button
-                      onClick={() => copyToClipboard(key.token)}
-                      style={{
-                        backgroundColor: "transparent",
-                        border: "none",
-                        outlineColor: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        color: "#000",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <Image
-                        width={20}
-                        height={20}
-                        src="/clip.svg"
-                        alt="Loader"
-                      />
-                      Copiar
-                    </button>
+            </thead>
+            <tbody>
+              {tokenList.length === 0 ? (
+                <tr>
+                  <td colSpan={4}>
+                    No hay tokens generados para esta API Key.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                tokenList.map((key) => (
+                  <tr key={key.token}>
+                    <td title={key.token}>{truncateToken(key.token)}</td>
+                    <td>{key.createdAt.toLocaleString()}</td>
+                    <td>{key.expiresAt.toLocaleString()}</td>
+                    <td>
+                      <button
+                        onClick={() => copyToClipboard(key.token)}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          outlineColor: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 10,
+                          color: "#000",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Image
+                          width={20}
+                          height={20}
+                          src="/clip.svg"
+                          alt="Loader"
+                        />
+                        Copiar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
         <button
           className={styles.generateBtn}

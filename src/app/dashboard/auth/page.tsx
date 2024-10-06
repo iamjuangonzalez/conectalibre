@@ -184,6 +184,16 @@ export default function Login() {
                 >
                   Registrarte
                 </button>
+                <a
+                  style={{
+                    color: "#000",
+                    textAlign: "center",
+                    textDecoration: "underline",
+                  }}
+                  href="/consulta-profesionales-salud"
+                >
+                  Volver al inicio
+                </a>
               </div>
             </form>
           </div>
@@ -244,6 +254,16 @@ export default function Login() {
                   Iniciar sesión
                 </button>
               </div>
+              <a
+                style={{
+                  color: "#000",
+                  textAlign: "center",
+                  textDecoration: "underline",
+                }}
+                href="/consulta-profesionales-salud"
+              >
+                Volver al inicio
+              </a>
             </form>
           </div>
         )}
