@@ -30,7 +30,7 @@ const HomePage = () => {
 
       document.cookie = `firebaseToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
       // Aquí puedes redirigir al usuario a la página de login o inicio
-      window.location.href = "/dashboard/auth"; // Cambia la ruta según tu aplicación
+      router.push("/dashboard/auth");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -39,7 +39,7 @@ const HomePage = () => {
   useEffect(() => {
     if (!loading && !user) {
       // Si no hay usuario y ya terminó de cargar, redirigir al login
-      router.push("/dashboard/login");
+      router.push("/dashboard/auth");
     }
   }, [user, loading, router]);
 
